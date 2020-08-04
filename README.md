@@ -13,13 +13,11 @@ web application is to show the message "Welcome to Dragonfly" on the browser (It
 5. Dockerize the application developed in step(1) and deploy the application to the kubernetes cluster provisioned above
 6. Submit a Pull-Request to the git repository in step(2) and the CI-CD pipeline should push the changes to Kubernetes cluster
 
-============================================================================
-============================================================================
-
+===========================================================
+===========================================================
    **************** Project Walk through **************
-
-============================================================================
-============================================================================
+===========================================================
+===========================================================
 
 Tools Used
 
@@ -64,6 +62,6 @@ Tools Used
 
 #Proposed Improvements in my solution:
 
-- Make CD workflow work 
+- Make CD part of the pipeline workflow work 
 - Introduce Health Checks for the application and the Load Balancer
 
