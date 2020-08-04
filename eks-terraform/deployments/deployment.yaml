@@ -1,3 +1,7 @@
+# creating the service LB (layer 4)
+# attaching the deployment (which is group of Pods running the same service, identified by labels: dfly-service)
+# LB port 80 ---> port 8080 of the pods where node js app is listening
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -36,84 +40,3 @@ spec:
         image: 816360740237.dkr.ecr.us-west-2.amazonaws.com/dfly_images:v1
         ports:
         - containerPort: 8080
-
-# docker tag  816360740237.dkr.ecr.us-west-2.amazonaws.com/dfly-app/dflyapp
-# docker push 816360740237.dkr.ecr.us-west-2.amazonaws.com/dfly-app/dflyapp:v1
-# docker push  816360740237.dkr.ecr.us-west-2.amazonaws.com/dfly_images:v1
- #
-#  aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 816360740237.dkr.ecr.us-west-2.amazonaws.com
-# curl -i -H "Authorization: Basic $TOKEN" https://816360740237.dkr.ecr.us-west-2.amazonaws.com/v2/dfly_images:v1/list
-# curl -i -H "Authorization: Basic $TOKEN" https://aws_account_id.dkr.ecr.region.amazonaws.com/v2/amazonlinux/tags/list
-
-
- # 679  kubectl version --short --client
- #  680  kubectl get nodes
- #  702  kubectl get nodes
- #  703  kubectl get nodes --watch
- #  705  kubectl get svc
- #  707  kubectl get nodes --watch
- #  708  kubectl get nodes
- #  709  kubectl get nodes
- #  711  kubectl apply -f deployment.yml
- #  714  kubectl apply -f deployment.yml
- #  715  kubectl apply -f deployment.yml  -v
- #  717  kubectl apply -f deployment.yaml
- #  756  kubectl get nodes — watch
- #  757  kubectl get nodes
- #  758  kubectl get nodes --watch
- #  759  kubectl help
- #  760  kubectl cluster-info
- #  761* kubectl get no
- #  766  kubectl get nodes --watch
- #  767  kubectl get nodes
- #  768  kubectl get nodes
- #  769  kubectl get nodes
- #  770  kubectl get nodes
- #  786  kubectl get nodes
- #  802  kubectl get nodes
- #  803  kubectl get nodes
- #  805  kubectl get svc
- #  806  kubectl get svc
- #  810  kubectl get svc
- #  811  kubectl get nodes
- #  816  kubectl get nodes
- #  817  kubectl get pods
- #  819  kubectl get nodes
- #  824  kubectl apply -f deployment.yaml
- #  826* kubectl  -f deployment.yaml
- #  827  kubectl get pods
- #  828  kubectl get pods
- #  831  kubectl get nodes
- #  832  kubectl get pods
- #  833  kubectl get all -n kube-system
- #  834  kubectl get all -n kube-system
- #  835  kubectl get pod
- #  836  kubectl get pod/my-*
- #  837  kubectl get pods
- #  839  kubectl delete service nginx-service
- #  840  kubectl delete service my-service
- #  843* kubectl delete deployment my-deploymen
- #  844  kubectl delete deployment.apps/my-deployment  service/my-service
- #  845  kubectl delete -f deployment.yaml
- #  846  kubectl get all
- #  847  kubectl create -f loadbalancer.yaml
- #  848  kubectl expose service  dfly-service  --type=LoadBalancer
- #  849* kubectl expose deployment.yaml   --type=LoadBalancer  --name=nginx-service
- #  850  kubectl apply -f deployment.yaml
- #  851  kubectl -n my-nginx get svc
- #  852  kubectl get svc
- #  853  kubectl get service
- #  854  kubectl get services --all-namespaces
- #  855  kubectl -n kube-system patch svc dfly-service -p '{"spec": {"type": "LoadBalancer"}}'
- #  856  kubectl -n kube-system patch svc my-service -p '{"spec": {"type": "LoadBalancer"}}'
- #  857  kubectl get services --all-namespaces
- #  858  export loadbalancer=$(kubectl -n kube-system  get svc dfly-service -o jsonpath={'.status'.loadBalancer.ingress[*].hostname})
- #  859  export loadbalancer=$(kubectl -n kube-system get svc my-service -o jsonpath={'.status'.loadBalancer.ingress[*].hostname})
- #  863  kubectl -n kube-system describe service my-service | grep Ingress
- #  901  kubectl get all
- #  902  kubectl get all -n kube-system
- #  903  kubectl delete -f deployment.yaml
- #  904  kubectl update -f deployment.yaml
- #  905  kubectl apply -f deployment.yaml
- #  906  kubectl apply -f deployment.yaml
- #  907  history | grep kubectl

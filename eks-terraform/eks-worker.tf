@@ -1,3 +1,7 @@
+# this is the user data script that will be used to join the Worker Nodes to the EKS Cluster
+# this runs on ec2 instances as user data script during the start up of the instances
+# Before this is run you need the Config Map to run and apply changes to the AWS-IAM-authenticator
+# This will give EC2 Worker Nodes Instacne Profile(attached with Worker Node role and policeis ) to join the EKS cluster
 
 locals {
 eks-node-userdata = <<USERDATA
@@ -11,6 +15,8 @@ TAG_VALUE="`aws ec2 describe-tags --filters "Name=resource-id,Values=$INSTANCE_I
 USERDATA
 
 }
+
+# Launch configuration to set the userdata scripts, subnets, instance size and other basic configurations
 
 resource "aws_launch_configuration" "eks_worker_launch_config" {
   iam_instance_profile        = aws_iam_instance_profile.dfly-worker-profile.name
@@ -27,6 +33,9 @@ resource "aws_launch_configuration" "eks_worker_launch_config" {
   }
 
 }
+
+# ASG for setting the desired capacity to the number of Worker and setting the Tags which are necessary for EC2 workers to
+# identify the EKS cluster.
 
 resource "aws_autoscaling_group" "eks_worker_asg" {
   desired_capacity     = var.desired_size

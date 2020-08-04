@@ -1,4 +1,12 @@
+# Amazon EKS uses IAM to provide authentication to your Kubernetes cluster through the AWS IAM authenticator for Kubernetes.
+# You can configure the stock kubectl client to work with Amazon EKS by installing
+# the AWS IAM authenticator for Kubernetes and modifying your kubectl configuration file to use it for authentication.
+
+
+
 # save the 'terraform output eks_kubeconfig > config', run 'mv config ~/.kube/config' to use it for kubectl
+
+
 locals {
   kubeconfig = <<KUBECONFIG
 
@@ -30,3 +38,11 @@ users:
 KUBECONFIG
 
 }
+
+#certificate-authority-data: is created by AWS EKS for the cluster
+#aws-iam-authenticator (To always use a specific named AWS credential profile)
+
+
+# authenticator configuration map will show each role and user groups and the policies attached to it
+# it can be edited to add or remove permissions on cluster resources
+# it is also used to give access to visualize the cluster resources to a user account in DFLY-CI-CD/eks-terraform/cluster_join.tf file.

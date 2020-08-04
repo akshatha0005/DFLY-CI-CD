@@ -1,4 +1,4 @@
-#----- Master node IAM role and policies-----
+#-----  CLuster IAM role and policies-----
 
 resource "aws_iam_role" "eks_cluster_role" {
   name = "dfly-eks-cluster-role"
