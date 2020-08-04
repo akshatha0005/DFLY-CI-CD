@@ -1,2 +1,2 @@
 # DFLY-CI-CD
-DFLY is node js app hosted on EKS with CI/CD pipelines. 
+DFLY is NodeJS app hosted on EKS with CI/CD pipelines. 
