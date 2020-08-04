@@ -1,3 +1,14 @@
+#VPC --> in us-west-2 region
+#Private subnets in 3 AZ
+#Public subnets in 3 AZ
+#ROUTE Tables and Security Group to guide traffic in and out of subnets
+#ECR repository for hosting Docker Images
+#Dynamo DB for handling the state file Locks for collabrative working and sharing of terraform state files
+#S3 bucket for storing the state files and versioning capability will add a secure backup option of state files
+
+
+
+# VPC for hosting the EKS Cluster
 resource "aws_vpc" "eks_vpc" {
   cidr_block       = var.cidr_block
   enable_dns_hostnames = true
@@ -8,6 +19,7 @@ resource "aws_vpc" "eks_vpc" {
   }
 }
 
+# Creating 3 Private subnets with the count feature
 resource "aws_subnet" "eks_private_subnet" {
   count      = length(var.private_subnets)
   vpc_id     = aws_vpc.eks_vpc.id
@@ -22,6 +34,7 @@ resource "aws_subnet" "eks_private_subnet" {
   }
 }
 
+# Creating 3 Public subnets with the count feature
 resource "aws_subnet" "eks_public_subnet" {
   count      = length(var.public_subnets)
   vpc_id     = aws_vpc.eks_vpc.id
@@ -35,6 +48,7 @@ resource "aws_subnet" "eks_public_subnet" {
   }
 }
 
+#IGW for allowing internet access for the VPC traffic
 resource "aws_internet_gateway" "eks_igw" {
   vpc_id = aws_vpc.eks_vpc.id
 
@@ -44,11 +58,16 @@ resource "aws_internet_gateway" "eks_igw" {
   }
 }
 
+#For internet reachability from private subnets, EIP are needed 1 per subnet.
+# they are attached to NAT GATEWAY and NATs are hosted in Public subnet
+# NAT GATEWAY are used in Route Tables that are attached to Private subnet.
+# so Internet traffic from Private Subnet flows through NAT GATEWAY via Public Subnet
 resource "aws_eip" "eks_nat_eips" {
   count = length(var.region_zones)
   vpc   = "true"
 }
 
+# Creating NATS that are attached to EIPs
 resource "aws_nat_gateway" "eks_nats" {
   count         = length(var.region_zones)
   allocation_id = element(aws_eip.eks_nat_eips.*.id, count.index)
@@ -56,6 +75,7 @@ resource "aws_nat_gateway" "eks_nats" {
   depends_on    = [aws_internet_gateway.eks_igw]
 }
 
+#Creating Route Tables to enable the Public Subnet routing capabilities
 resource "aws_route_table" "eks_public_rt" {
   vpc_id = aws_vpc.eks_vpc.id
 
@@ -65,6 +85,7 @@ resource "aws_route_table" "eks_public_rt" {
   }
 }
 
+#Creating Route Tables to enable the Private Subnet routing capabilities
 resource "aws_route_table" "eks_private_rt" {
   count  = length(var.region_zones)
   vpc_id = aws_vpc.eks_vpc.id
@@ -74,12 +95,14 @@ resource "aws_route_table" "eks_private_rt" {
   }
 }
 
+#Defining  routes  for Public traffic
 resource "aws_route" "ek_public_route" {
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.eks_igw.id
   route_table_id         = aws_route_table.eks_public_rt.id
 }
 
+#Definingroutes  for Private traffic
 resource "aws_route" "eks_private_route" {
   count                  = length(var.region_zones)
   destination_cidr_block = "0.0.0.0/0"
@@ -87,6 +110,7 @@ resource "aws_route" "eks_private_route" {
   route_table_id         = element(aws_route_table.eks_private_rt.*.id, count.index)
 }
 
+#Attaching Routes to Route Table
 resource "aws_route_table_association" "public" {
   count          = length(var.public_subnets)
   route_table_id = aws_route_table.eks_public_rt.id
@@ -99,6 +123,7 @@ resource "aws_route_table_association" "private" {
   subnet_id      = element(aws_subnet.eks_private_subnet.*.id, count.index)
 }
 
+#For State file locks in Dynamo DB tables
 resource "aws_dynamodb_table" "tf_state_lock" {
   name           = "tf-state-lock"
   read_capacity  = 4
@@ -111,6 +136,7 @@ resource "aws_dynamodb_table" "tf_state_lock" {
   }
 }
 
+#ECR repository for storing the CI builds
 resource "aws_ecr_repository" "eks_image_repository" {
   name                 = "dfly_images"
   image_tag_mutability = "MUTABLE"
@@ -120,6 +146,7 @@ resource "aws_ecr_repository" "eks_image_repository" {
   }
 }
 
+#Permissions to access the Images in ECR
 resource "aws_ecr_repository_policy" "eks_image_repository_policy" {
   repository = aws_ecr_repository.eks_image_repository.name
 
@@ -151,4 +178,22 @@ resource "aws_ecr_repository_policy" "eks_image_repository_policy" {
     ]
 }
 EOF
+}
+
+#S3 bucket for storing Terraform State files
+resource "aws_s3_bucket" "terraform_state_bucket" {
+  bucket = "dfly-assesment-tf"
+  # Enable versioning so we can see the full revision history of our
+  # state files
+  versioning {
+    enabled = true
+  }
+  # Enable server-side encryption by default
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 }

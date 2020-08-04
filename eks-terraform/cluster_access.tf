@@ -1,6 +1,14 @@
+# To configure terraform-kubernetes provider to run the apply for kubernetes_config_map
+# it needs token which we can get through this and use it in provider block.
+
+
 data "external" "aws_iam_authenticator" {
-  program = ["sh", "-c", "aws-iam-authenticator token -i ${var.eks_cluster_name} | jq -r -c .status"]
+  program = ["sh", "-c", "aws-iam-authenticator token -i ${var.eks_cluster_name} ${var.aws_profile} | jq -r -c .status"]
 }
+
+# this will apply the config map which is to update the aws-iam-authenticator user and role
+# permissions to access the cluster resources
+
 
 resource "kubernetes_config_map" "aws_auth" {
   metadata {

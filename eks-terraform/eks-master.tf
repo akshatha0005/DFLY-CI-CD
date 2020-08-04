@@ -1,3 +1,4 @@
+# Creating the Cluster in Public subnets
 
 resource "aws_eks_cluster" "dfly-eks-cluster" {
   name            = var.eks_cluster_name

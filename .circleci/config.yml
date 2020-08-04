@@ -1,3 +1,8 @@
+# Here the workflow is defined to do the Build of Node JS app and push the
+# New Node JS app image to ECR repository.
+
+
+
 version: 2
 jobs:
   build:

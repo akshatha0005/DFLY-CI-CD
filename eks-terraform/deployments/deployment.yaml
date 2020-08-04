@@ -1,3 +1,7 @@
+# creating the service LB (layer 4)
+# attaching the deployment (which is group of Pods running the same service, identified by labels: dfly-service)
+# LB port 80 ---> port 8080 of the pods where node js app is listening
+
 apiVersion: v1
 kind: Service
 metadata:

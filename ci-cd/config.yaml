@@ -1,3 +1,18 @@
+# tried to work on the Continuous deployment part with this script but would require more time to debug
+# Here the workflow is divided in the Build and Deploy part
+# Build is same as that presented in the DFLY-CI-CD/.circleci/config.yaml file,
+# it is building the docker image with the Node JS application code and defining
+# the starting command for the app on port 8080.
+
+# Deployment part of the workflow will provide the functionality to edit the Deployment file
+# with new image that is generated in the Build part of the workflow.
+# The idea is to utilize the orbs which are configurable jobs according the
+# provider in our case aws-eks.
+# it would edit the job with the new iamge and update the config with kubectl command.
+# Which will redeploy the pods with the New Node JS image. 
+
+
+
 version: 2.1
 
 
