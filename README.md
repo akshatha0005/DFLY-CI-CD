@@ -24,6 +24,7 @@ web application is to show the message "Welcome to Dragonfly" on the browser (It
 Tools Used
 
   Terraform:
+  
     - To create the VPC resources and EKS Cluster.
     - State files are in the S3 bucket
     - EKS cluster runs Deployment service, that has pods running
@@ -47,10 +48,10 @@ Tools Used
       (ii)  It will Build the docker image from the Dockerfile
       
       (iii) Push the Node js Docker Image to ECR repository
-    - In DFLY-CI-CD/ci-cd/config.yaml file I have tried to come up with complete CI/CD pipeline for circleci.
-      In the above step BUILD (CI part) is a success but CD part I was running into more issues and needed more time to debug
-      So I have kept it as a separate directory to display the idea on which I was trying to get full CI/CD portion of the
-      problem statement.
+        - In DFLY-CI-CD/ci-cd/config.yaml file I have tried to come up with complete CI/CD pipeline for circleci.
+          In the above step BUILD (CI part) is a success but CD part I was running into more issues and needed more 
+          time to debug. So I have kept it as a separate directory to display the idea on which I was trying to 
+          get full CI/CD portion of the problem statement.
 
   Github:
     - For distributed version control of the source code of entire problem solution.
@@ -60,3 +61,9 @@ Tools Used
       Or can do a demo with the screen share while I approve your PR.
 
 #Note: Please look inside each file. It has detailed description about AWS-IAM-AUTHENTICATOR, VPC and Kubeconfig usecase. 
+
+#Proposed Improvements in my solution:
+
+- Make CD workflow work 
+- Introduce Health Checks for the application and the Load Balancer
+
