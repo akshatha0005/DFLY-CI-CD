@@ -5,21 +5,21 @@ dfly offers its PaaS on AWS. To develop applications on dfly, it is expected tha
 **************************|**************************|**************************|**************************
 Candidate should provide every developer a website with a simple message: "Welcome to Dfly"
 **************************|**************************|**************************|**************************
-1. Candidate can develop their web applications on Java/NodeJS/Python/Golang or any programming language of their chouce. The purpose of that web application is to show the message "Welcome to Dragonfly" on the browser (It can be Nginx or Apache)
+1. Candidate can develop their web applications on Java/NodeJS/Python/Golang or any programming language of their chouce. The purpose of that 
+web application is to show the message "Welcome to Dragonfly" on the browser (It can be Nginx or Apache)
 2. The web application should be checked into a git repository (github or gitlab) and should be open for other developers to submit Pull-Requests
 3. The repository should be equipped with a CI-CD pipeline. It can be a Jenkins/Travis-CI/Circle-CI/any-CI pipieline that does the continuous deployments
 4. Provision a Kubernetes Cluster on AWS - can be EKS or KOPS using Terraform or CloudFormation
 5. Dockerize the application developed in step(1) and deploy the application to the kubernetes cluster provisioned above
 6. Submit a Pull-Request to the git repository in step(2) and the CI-CD pipeline should push the changes to Kubernetes cluster
 
-========================================================================================================================================================================
-========================================================================================================================================================================
+============================================================================
+============================================================================
 
-      **************************************************************** Project Walk through ********************************************************************
+   **************** Project Walk through **************
 
-========================================================================================================================================================================
-========================================================================================================================================================================
-
+============================================================================
+============================================================================
 
 Tools Used
 
@@ -41,8 +41,11 @@ Tools Used
   CircleCI:
     - For doing CI/CD pipeline
     - in DFLY-CI-CD/.circleci/config.yml file the Build pipeline is there.  (<----- CI part ----->)
+    
       (i)   The pipeline is configured to download the github repo where Node Js app code is stored.
+      
       (ii)  It will Build the docker image from the Dockerfile
+      
       (iii) Push the Node js Docker Image to ECR repository
     - In DFLY-CI-CD/ci-cd/config.yaml file I have tried to come up with complete CI/CD pipeline for circleci.
       In the above step BUILD (CI part) is a success but CD part I was running into more issues and needed more time to debug
